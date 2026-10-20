@@ -1,23 +1,560 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>dager.cn</title>
-    <style>
-        body { font-family: -apple-system, "Segoe UI", sans-serif; display: flex;
-               min-height: 100vh; align-items: center; justify-content: center;
-               margin: 0; background: #f5f5f5; color: #333; }
-        .card { background: #fff; padding: 3rem 4rem; border-radius: 12px;
-                box-shadow: 0 4px 16px rgba(0,0,0,.08); text-align: center; }
-        h1 { margin: 0 0 .5rem; font-size: 1.6rem; }
-        p { margin: 0; color: #888; }
-    </style>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="keywords" content="达盖尔旗帜,新时代我们,dagaier,技术社区">
+<meta name="description" content="达盖尔旗帜 · 新时代我们 —— 一个开放、自由、纯粹的技术交流社区。">
+<title>达盖尔旗帜 · 新时代我们</title>
+<link href="https://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://apps.bdimg.com/libs/fontawesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+<style>
+    :root{
+        --paper:#faf8f4;
+        --paper-2:#f2efe8;
+        --ink:#1b1a17;
+        --muted:#8a8578;
+        --line:#ded9cf;
+        --seal:#b5322a;
+    }
+    body{
+        padding-top:64px;
+        background:var(--paper);
+        color:var(--ink);
+        font-family:"Helvetica Neue",Helvetica,"PingFang SC","Microsoft YaHei",sans-serif;
+        line-height:1.9;
+    }
+    .serif{
+        font-family:Georgia,"Times New Roman","Songti SC","STSong","Noto Serif CJK SC","Source Han Serif SC",serif;
+    }
+    a{ color:var(--ink); }
+    a:hover,a:focus{ color:var(--seal); text-decoration:none; }
+    ::selection{ background:var(--seal); color:#fff; }
+    .hair{ border:0; border-top:1px solid var(--line); margin:0; }
+
+    /* 顶部进度条 */
+    #progress{
+        position:fixed; top:0; left:0; height:2px; width:0; background:var(--seal); z-index:2000;
+        transition:width .1s linear;
+    }
+
+    /* ============ 导航 ============ */
+    .navbar-site{
+        background:rgba(250,248,244,.92); border:0; border-bottom:1px solid var(--line);
+        margin-bottom:0; min-height:64px;
+        backdrop-filter:saturate(180%) blur(8px);
+    }
+    .navbar-site .navbar-brand{
+        height:64px; line-height:36px; padding-left:0; font-size:16px; letter-spacing:.2em;
+    }
+    .seal{
+        display:inline-block; width:22px; height:22px; line-height:22px; text-align:center;
+        background:var(--seal); color:#fff; font-size:12px; letter-spacing:0;
+        margin-right:10px; vertical-align:-5px;
+        font-family:"Songti SC","STSong",serif;
+    }
+    .navbar-site .nav > li > a{
+        font-size:13px; letter-spacing:.14em; color:var(--muted); line-height:36px;
+        padding-left:14px; padding-right:14px;
+    }
+    .navbar-site .nav > li > a:hover{ color:var(--ink); }
+    .navbar-site .nav > li.active > a{ color:var(--seal); font-weight:600; background:transparent; }
+    .navbar-site .navbar-toggle{ margin-top:15px; border-color:var(--line); }
+    .navbar-site .navbar-toggle .icon-bar{ background:var(--ink); }
+
+    /* ============ 通用 ============ */
+    .section{ padding:104px 0; }
+    .section--alt{ background:var(--paper-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .eyebrow{
+        font-size:11px; letter-spacing:.34em; text-transform:uppercase; color:var(--seal);
+        display:block; margin-bottom:22px;
+    }
+    .sec-title{
+        font-size:34px; font-weight:400; letter-spacing:.1em; margin:0 0 18px; line-height:1.4;
+    }
+    .sec-text{ color:var(--muted); font-size:15px; }
+    .rule-short{ width:38px; border:0; border-top:2px solid var(--seal); margin:0 0 24px; }
+
+    .reveal{ opacity:0; transform:translateY(24px); }
+    .reveal.in{
+        opacity:1; transform:none;
+        transition:opacity 1s cubic-bezier(.2,.7,.3,1), transform 1s cubic-bezier(.2,.7,.3,1);
+    }
+
+    /* ============ 首屏 ============ */
+    .hero{ padding:110px 0 96px; position:relative; }
+    .hero h1{
+        font-size:76px; font-weight:400; line-height:1.12; letter-spacing:.06em; margin:0 0 26px;
+    }
+    .hero h1 em{ font-style:normal; color:var(--seal); }
+    .hero h1 .en{
+        display:block; font-size:13px; letter-spacing:.42em; color:var(--muted);
+        margin-top:26px; font-family:"Helvetica Neue",Helvetica,sans-serif;
+    }
+    .hero p.lead{ font-size:16px; color:var(--muted); max-width:520px; margin:0 0 40px; }
+    .btn-ink{
+        border:1px solid var(--ink); background:transparent; border-radius:0; color:var(--ink);
+        padding:13px 36px; font-size:14px; letter-spacing:.18em; transition:all .3s;
+    }
+    .btn-ink:hover{ background:var(--ink); color:#fff; }
+    .btn-seal{ border-color:var(--seal); background:var(--seal); color:#fff; }
+    .btn-seal:hover{ background:#96271f; border-color:#96271f; color:#fff; }
+    .hero .btn + .btn{ margin-left:10px; }
+
+    /* 封面框 */
+    .cover{
+        border:1px solid var(--line); padding:26px; position:relative; background:#fff;
+    }
+    .cover::after{
+        content:""; position:absolute; inset:8px; border:1px solid rgba(222,217,207,.6); pointer-events:none;
+    }
+    .cover .top{
+        font-size:11px; letter-spacing:.3em; color:var(--muted); text-transform:uppercase;
+        display:flex; justify-content:space-between;
+    }
+    .cover .mid{
+        display:flex; justify-content:center; align-items:center; padding:52px 0;
+    }
+    .cover .vertical{
+        writing-mode:vertical-rl; text-orientation:upright; letter-spacing:.35em;
+        font-size:26px; line-height:1.6; margin:0;
+    }
+    .cover .vertical span{ color:var(--seal); }
+    .cover .bottom{
+        display:flex; justify-content:space-between; align-items:flex-end;
+        font-size:11px; letter-spacing:.24em; color:var(--muted);
+    }
+    .cover .bottom .big{ font-size:30px; letter-spacing:.06em; color:var(--ink); line-height:1; }
+
+    /* 关键词条 */
+    .ticker{
+        border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+        padding:16px 0; overflow:hidden; white-space:nowrap;
+    }
+    .ticker span{
+        font-size:12px; letter-spacing:.28em; color:var(--muted); padding:0 26px; text-transform:uppercase;
+    }
+    .ticker span i{ color:var(--seal); font-style:normal; }
+
+    /* ============ 关于 ============ */
+    .about-title{ position:sticky; top:96px; }
+    .dl-rows{ margin:0; }
+    .dl-row{
+        border-top:1px solid var(--line); padding:26px 0; display:flex; align-items:baseline;
+        transition:padding-left .3s;
+    }
+    .dl-row:last-child{ border-bottom:1px solid var(--line); }
+    .dl-row:hover{ padding-left:10px; }
+    .dl-row .no{
+        font-size:13px; letter-spacing:.2em; color:var(--seal); width:66px; flex:0 0 66px;
+    }
+    .dl-row h4{ font-size:17px; letter-spacing:.08em; margin:0 0 6px; }
+    .dl-row p{ margin:0; color:var(--muted); font-size:14px; }
+
+    /* ============ 数据 ============ */
+    .figures{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .figure{ text-align:center; padding:56px 12px; }
+    .figure + .figure{ border-left:1px solid var(--line); }
+    .figure .n{ font-size:44px; line-height:1; letter-spacing:.02em; }
+    .figure .n i{ font-style:normal; font-size:18px; color:var(--seal); }
+    .figure .t{ font-size:12px; letter-spacing:.24em; color:var(--muted); margin-top:14px; }
+
+    /* ============ 板块目录 ============ */
+    .board-list{ border-top:1px solid var(--line); }
+    .board-item{
+        display:block; border-bottom:1px solid var(--line); padding:26px 8px; position:relative;
+        transition:background .3s, padding .3s;
+    }
+    .board-item:hover{ background:#fff; padding-left:22px; }
+    .board-item .no{
+        font-size:12px; letter-spacing:.2em; color:var(--muted); margin-right:26px;
+        transition:color .3s;
+    }
+    .board-item:hover .no{ color:var(--seal); }
+    .board-item h4{
+        display:inline; font-size:19px; letter-spacing:.08em; margin:0;
+    }
+    .board-item .desc{ font-size:14px; color:var(--muted); margin-left:16px; }
+    .board-item .arrow{
+        position:absolute; right:8px; top:50%; margin-top:-10px; color:var(--line);
+        transition:right .3s, color .3s;
+    }
+    .board-item:hover .arrow{ right:0; color:var(--seal); }
+
+    /* ============ 引文 ============ */
+    .quote{ text-align:center; padding:96px 0; }
+    .quote blockquote{
+        border:0; margin:0 auto; max-width:760px; font-size:26px; line-height:2;
+        letter-spacing:.06em; color:var(--ink);
+    }
+    .quote blockquote::before{ content:"“"; display:block; font-size:64px; color:var(--seal); line-height:.6; }
+    .quote .by{ font-size:12px; letter-spacing:.28em; color:var(--muted); margin-top:26px; }
+
+    /* ============ 主张 ============ */
+    .mani{
+        border-top:2px solid var(--ink); padding-top:26px;
+    }
+    .mani .no{ font-size:13px; letter-spacing:.28em; color:var(--seal); }
+    .mani h4{ font-size:20px; letter-spacing:.1em; margin:14px 0 12px; }
+    .mani p{ color:var(--muted); font-size:14px; }
+
+    /* ============ CTA ============ */
+    .cta{
+        background:var(--seal); color:#fff; padding:92px 0; text-align:center;
+    }
+    .cta h2{ font-size:32px; letter-spacing:.16em; margin:0 0 16px; font-weight:400; }
+    .cta p{ color:rgba(255,255,255,.78); margin-bottom:36px; font-size:15px; }
+    .cta .btn-ink{ border-color:rgba(255,255,255,.6); color:#fff; }
+    .cta .btn-ink:hover{ background:#fff; color:var(--seal); }
+    .cta .btn-solid{ background:#fff; color:var(--seal); border-color:#fff; }
+    .cta .btn-solid:hover{ background:#1b1a17; border-color:#1b1a17; color:#fff; }
+
+    /* ============ 页脚 ============ */
+    footer{ background:#1b1a17; color:#a8a396; padding:72px 0 0; font-size:14px; }
+    footer .f-brand{ color:#fff; font-size:16px; letter-spacing:.2em; margin-bottom:16px; }
+    footer .f-desc{ font-size:13px; max-width:320px; }
+    footer .f-title{
+        color:#fff; font-size:12px; letter-spacing:.24em; margin-bottom:20px; text-transform:uppercase;
+    }
+    footer .f-list{ list-style:none; padding:0; margin:0; }
+    footer .f-list li{ margin-bottom:9px; }
+    footer .f-list a{ color:#a8a396; font-size:13px; }
+    footer .f-list a:hover{ color:#fff; }
+    footer .f-contact{ font-size:13px; }
+    footer .f-contact i{ color:var(--seal); margin-right:10px; }
+    footer .f-bottom{
+        margin-top:56px; border-top:1px solid #33312c; padding:24px 0 28px; font-size:13px;
+    }
+    footer .f-bottom a{ color:#a8a396; }
+    footer .f-bottom a:hover{ color:#fff; }
+
+    /* 返回顶部 */
+    #toTop{
+        position:fixed; right:24px; bottom:24px; width:40px; height:40px; line-height:38px; text-align:center;
+        border:1px solid var(--line); background:var(--paper); color:var(--ink); z-index:99;
+        opacity:0; visibility:hidden; transform:translateY(8px); transition:all .3s;
+    }
+    #toTop.show{ opacity:1; visibility:visible; transform:none; }
+    #toTop:hover{ background:var(--ink); color:#fff; border-color:var(--ink); }
+
+    @media (max-width:991px){
+        .section{ padding:76px 0; }
+        .sec-title{ font-size:26px; }
+        .about-title{ position:static; margin-bottom:32px; }
+        .cover{ margin-top:40px; }
+    }
+    @media (max-width:767px){
+        body{ padding-top:56px; }
+        .navbar-site .navbar-brand{ height:56px; line-height:30px; }
+        .hero{ padding:64px 0 60px; }
+        .hero h1{ font-size:42px; }
+        .hero .btn{ display:block; max-width:260px; margin:0 auto; }
+        .hero .btn + .btn{ margin-left:auto; margin-top:12px; }
+        .figure{ padding:32px 12px; }
+        .figure + .figure{ border-left:0; border-top:1px solid var(--line); }
+        .board-item .desc{ display:block; margin-left:52px; }
+        .quote blockquote{ font-size:20px; }
+        footer .f-col{ margin-bottom:32px; }
+    }
+</style>
 </head>
-<body>
-    <div class="card">
-        <h1>dager.cn</h1>
-        <p>Site initialized by oject.php</p>
+<body data-spy="scroll" data-target="#nav-main" data-offset="80">
+
+<div id="progress"></div>
+
+<nav class="navbar navbar-site navbar-fixed-top" id="nav-main" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-collapse">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand serif" href="#top"><span class="seal">旗</span>达盖尔旗帜</a>
+        </div>
+        <div class="collapse navbar-collapse" id="nav-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="active"><a href="#top">首页</a></li>
+                <li><a href="#about">关于</a></li>
+                <li><a href="#board">板块</a></li>
+                <li><a href="#manifesto">主张</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+        </div>
     </div>
+</nav>
+
+<header class="hero" id="top">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <span class="eyebrow">Daguerre Flag Community</span>
+                <h1 class="serif">新时代 · <em>我们</em><span class="en">Since 2014 &nbsp;/&nbsp; 开放 · 自由 · 纯粹</span></h1>
+                <p class="lead">达盖尔旗帜是一个开放、自由、纯粹的技术交流社区。在这里记录时代，分享知识，与同行者一起向前。</p>
+                <a href="#about" class="btn btn-ink btn-seal">关于我们</a>
+                <a href="#board" class="btn btn-ink">浏览板块</a>
+            </div>
+            <div class="col-md-5">
+                <div class="cover reveal">
+                    <div class="top"><span>Issue 01</span><span>导览</span></div>
+                    <div class="mid">
+                        <p class="vertical serif">新<span>时代</span>我们</p>
+                    </div>
+                    <div class="bottom">
+                        <span>DAGAIER.CN<br>达盖尔旗帜</span>
+                        <span class="big serif">2026</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="ticker">
+    <div class="container text-center">
+        <span><i>01</i> 开放</span><span><i>02</i> 自由</span><span><i>03</i> 纯粹</span>
+        <span><i>04</i> 分享</span><span><i>05</i> 记录</span><span><i>06</i> 同行</span>
+    </div>
+</div>
+
+<section class="section" id="about">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="about-title">
+                    <span class="eyebrow">About Us</span>
+                    <h2 class="sec-title serif">关于<br>我们</h2>
+                    <hr class="rule-short">
+                    <p class="sec-text">始于兴趣，成于热爱。我们坚持内容至上，守护每一个愿意表达的声音。</p>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="dl-rows">
+                    <div class="dl-row reveal">
+                        <div class="no serif">No.01</div>
+                        <div>
+                            <h4 class="serif">达盖尔旗帜</h4>
+                            <p>一面属于技术人的旗帜。以内容为锚点，以兴趣为方向，让每一次表达都被认真对待。</p>
+                        </div>
+                    </div>
+                    <div class="dl-row reveal">
+                        <div class="no serif">No.02</div>
+                        <div>
+                            <h4 class="serif">新时代我们</h4>
+                            <p>汇聚五湖四海的朋友，交流技术、分享生活，共同见证这个正在发生的时代。</p>
+                        </div>
+                    </div>
+                    <div class="dl-row reveal">
+                        <div class="no serif">No.03</div>
+                        <div>
+                            <h4 class="serif">开放共享</h4>
+                            <p>知识因分享而有价值，社区因开放而长久。让每一份输出都能被看见、被延续。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="figures">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 col-xs-6 figure reveal">
+                <div class="n serif"><b class="count" data-count="128">0</b><i>K+</i></div>
+                <div class="t">注册成员</div>
+            </div>
+            <div class="col-sm-3 col-xs-6 figure reveal">
+                <div class="n serif"><b class="count" data-count="96">0</b><i>W+</i></div>
+                <div class="t">原创主题</div>
+            </div>
+            <div class="col-sm-3 col-xs-6 figure reveal">
+                <div class="n serif"><b class="count" data-count="32">0</b><i>+</i></div>
+                <div class="t">技术板块</div>
+            </div>
+            <div class="col-sm-3 col-xs-6 figure reveal">
+                <div class="n serif"><b class="count" data-count="12">0</b><i>年</i></div>
+                <div class="t">一路同行</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section--alt" id="board">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <span class="eyebrow">Sections</span>
+                <h2 class="sec-title serif">社区板块</h2>
+                <hr class="rule-short">
+                <p class="sec-text">从技术到生活，总有一个角落适合你驻足。</p>
+            </div>
+            <div class="col-md-8">
+                <div class="board-list">
+                    <a href="#" class="board-item reveal"><span class="no serif">01</span><h4 class="serif">技术交流</h4><span class="desc">编程、运维、网络与前沿技术</span><i class="fa fa-long-arrow-right arrow"></i></a>
+                    <a href="#" class="board-item reveal"><span class="no serif">02</span><h4 class="serif">资源分享</h4><span class="desc">开源项目、工具软件与学习资料</span><i class="fa fa-long-arrow-right arrow"></i></a>
+                    <a href="#" class="board-item reveal"><span class="no serif">03</span><h4 class="serif">生活杂谈</h4><span class="desc">日常、见闻与那些碎碎念</span><i class="fa fa-long-arrow-right arrow"></i></a>
+                    <a href="#" class="board-item reveal"><span class="no serif">04</span><h4 class="serif">站点公告</h4><span class="desc">规则更新、活动预告与社区治理</span><i class="fa fa-long-arrow-right arrow"></i></a>
+                    <a href="#" class="board-item reveal"><span class="no serif">05</span><h4 class="serif">新手指南</h4><span class="desc">从这里开始，快速融入社区</span><i class="fa fa-long-arrow-right arrow"></i></a>
+                    <a href="#" class="board-item reveal"><span class="no serif">06</span><h4 class="serif">友情链接</h4><span class="desc">与优秀站点互通，共同成长</span><i class="fa fa-long-arrow-right arrow"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="quote">
+    <div class="container">
+        <blockquote class="serif reveal">
+            知识因为分享而有了温度，<br>社区因为开放而得以长久。
+        </blockquote>
+        <div class="by reveal">— 达盖尔旗帜 · 新时代我们</div>
+    </div>
+</section>
+
+<section class="section" id="manifesto">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <span class="eyebrow">Manifesto</span>
+                <h2 class="sec-title serif">新时代主张</h2>
+                <hr class="rule-short">
+                <p class="sec-text">我们相信，好的社区是慢慢长出来的。</p>
+            </div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="mani reveal">
+                            <div class="no serif">壹</div>
+                            <h4 class="serif">真诚表达</h4>
+                            <p>拒绝喧嚣与浮夸，让内容回到内容本身。</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="mani reveal">
+                            <div class="no serif">贰</div>
+                            <h4 class="serif">彼此成就</h4>
+                            <p>一个人的经验，是另一个人的捷径。</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="mani reveal">
+                            <div class="no serif">叁</div>
+                            <h4 class="serif">长期主义</h4>
+                            <p>不追热点，不赶潮流，只做时间的朋友。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta">
+    <div class="container">
+        <h2 class="serif">与我们一起，开启新时代</h2>
+        <p>无论是分享、提问还是单纯地逛逛，这里都为你留了位置。</p>
+        <a href="#contact" class="btn btn-ink btn-solid">加入我们</a>
+        <a href="#board" class="btn btn-ink">浏览板块</a>
+    </div>
+</section>
+
+<footer id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-sm-6 f-col">
+                <div class="f-brand serif"><span class="seal">旗</span>达盖尔旗帜</div>
+                <p class="f-desc">开放 · 自由 · 纯粹的技术交流社区，记录时代，也记录我们。</p>
+            </div>
+            <div class="col-md-2 col-sm-6 f-col">
+                <div class="f-title">社区</div>
+                <ul class="f-list">
+                    <li><a href="#board">技术交流</a></li>
+                    <li><a href="#board">资源分享</a></li>
+                    <li><a href="#board">生活杂谈</a></li>
+                    <li><a href="#board">新手指南</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2 col-sm-6 f-col">
+                <div class="f-title">关于</div>
+                <ul class="f-list">
+                    <li><a href="#about">关于我们</a></li>
+                    <li><a href="#manifesto">社区主张</a></li>
+                    <li><a href="#">站点规则</a></li>
+                    <li><a href="#">友情链接</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 col-sm-6 f-col">
+                <div class="f-title">联系</div>
+                <p class="f-contact"><i class="fa fa-envelope-o"></i> contact@dagaier.cn</p>
+                <p class="f-contact"><i class="fa fa-globe"></i> www.dagaier.cn</p>
+                <p class="f-contact"><i class="fa fa-clock-o"></i> 7×24 小时在线</p>
+            </div>
+        </div>
+        <div class="f-bottom">
+            <div class="row">
+                <div class="col-sm-6 text-left">
+                    Copyright &copy; 2026 达盖尔旗帜 · 新时代我们 &nbsp;·&nbsp; dagaier.cn
+                </div>
+                <div class="col-sm-6 text-right">
+                    <a href="https://beian.miit.gov.cn/" target="_blank" rel="nofollow">鲁ICP备2024092961号-5</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;
+                    <a href="http://www.beian.gov.cn/portal/registerSystemInfo" target="_blank" rel="nofollow">
+                        <i class="fa fa-shield"></i> 鲁公网安备37130202373077号
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<a href="#top" id="toTop" title="返回顶部"><i class="fa fa-angle-up"></i></a>
+
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script>
+$(function () {
+    /* 滚动进度条 / 返回顶部 */
+    $(window).on('scroll', function () {
+        var y = $(this).scrollTop();
+        var max = $(document).height() - $(this).height();
+        $('#progress').width((max > 0 ? y / max * 100 : 0) + '%');
+        $('#toTop').toggleClass('show', y > 400);
+    }).trigger('scroll');
+
+    /* 平滑滚动 */
+    $('a[href^="#"]').on('click', function (e) {
+        var target = $(this.getAttribute('href'));
+        if (!target.length) return;
+        e.preventDefault();
+        $('html, body').stop().animate({ scrollTop: target.offset().top - 62 }, 700, 'swing');
+        if ($('.navbar-toggle').is(':visible')) $('#nav-collapse').collapse('hide');
+    });
+
+    /* 渐入 */
+    var $reveal = $('.reveal');
+    function reveal() {
+        var h = $(window).height();
+        $reveal.each(function (i) {
+            var $t = $(this);
+            if (!$t.hasClass('in') && $t.offset().top < $(window).scrollTop() + h - 80) {
+                setTimeout(function () { $t.addClass('in'); }, (i % 3) * 120);
+            }
+        });
+    }
+    $(window).on('scroll', reveal);
+    reveal();
+
+    /* 数字 */
+    $('.count').each(function () {
+        var $t = $(this), end = parseInt($t.data('count'), 10);
+        $({ n: 0 }).animate({ n: end }, {
+            duration: 1600, easing: 'swing',
+            step: function () { $t.text(Math.floor(this.n)); },
+            complete: function () { $t.text(end); }
+        });
+    });
+});
+</script>
 </body>
 </html>
